@@ -12,12 +12,12 @@ RUN powershell -Command \
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 # Copy your PHP project into the container
-COPY COPY index.php /htdocs/PhpProject1/
+COPY index.php /htdocs/PhpProject1/Krtii
 
-# Download and install MySQL client for Windows
+# Загружаем и устанавливаем MySQL-клиент для Windows
 ADD https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-web-community-8.0.28.0.msi C:/web/mysql-installer.msi
 RUN powershell -Command \
-    Start-Process msiexec.exe -ArgumentList '/i', 'C:\web\mysql-installer.msi', '/quiet', '/qn', '/norestart' -Wait ; \
+    Start-Process msiexec.exe -ArgumentList '/i', 'C:\web\mysql-installer.msi', '/quiet', '/qn', '/norestart', '/passive' -Wait ; \
     Remove-Item 'C:\web\mysql-installer.msi' -Force
 
 # Open port 80
