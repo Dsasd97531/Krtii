@@ -1,27 +1,32 @@
-# Use the official Windows Server Core with IIS image
-FROM mcr.microsoft.com/windows/servercore/iis
+# Используем образ с PHP и Apache
+FROM php:7.4-apache
 
-# Install and enable required features
-RUN powershell -Command \
-    Install-WindowsFeature Web-Server; \
-    Install-WindowsFeature NET-Framework-45-ASPNET; \
-    Install-WindowsFeature Web-Asp-Net45
+# Устанавливаем расширения PHP, необходимые для работы с базой данных MySQL
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Set TLS 1.2
-RUN powershell -Command \
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+# Копируем исходные файлы проекта в рабочую директорию Apache
+COPY . /xampp/htdocs/PhpProject1/Krtii/index.php
 
-# Copy your PHP project into the container
-COPY index.php /htdocs/PhpProject1/Krtii
+# Указываем рабочую директорию
+WORKDIR /xampp/htdocs/PhpProject1/Krtii/
 
-# Загружаем и устанавливаем MySQL-клиент для Windows
-ADD https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-web-community-8.0.28.0.msi C:/web/mysql-installer.msi
-RUN powershell -Command \
-    Start-Process msiexec.exe -ArgumentList '/i', 'C:\web\mysql-installer.msi', '/quiet', '/qn', '/norestart', '/passive' -Wait ; \
-    Remove-Item 'C:\web\mysql-installer.msi' -Force
+COPY . /xampp/htdocs/PhpProject1/Krtii/httpd.conf
 
-# Open port 80
+
+# Включаем модуль rewrite для Apache
+RUN a2enmod rewrite
+
+# Опционально, если требуется выполнить какие-либо команды SQL при запуске контейнера
+# COPY init.sql /docker-entrypoint-initdb.d/
+
+# Опционально, если требуется выполнить какие-либо дополнительные действия
+# RUN <команда>
+
+# Опционально, если требуется установить и настроить MySQL клиент
+# RUN apt-get install -y mysql-client
+
+# Опционально, если требуется указать порт, который будет слушать Apache
 EXPOSE 80
 
-# Command to start IIS
-CMD ["C:\\ServiceMonitor.exe", "w3svc"]
+# Опционально, если требуется выполнить какие-либо команды при запуске контейнера
+CMD ["apache2-foreground"]
