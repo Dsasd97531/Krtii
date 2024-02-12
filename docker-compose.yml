@@ -17,8 +17,8 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "base1"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: ""
+
+
     ports:
       - "3306:3306"
     volumes:
