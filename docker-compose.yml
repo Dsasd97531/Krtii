@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - .:/var/www/html
     depends_on:
@@ -17,12 +17,11 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "base1"
-
-
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./path/to/directory/containing/base1.sql:/docker-entrypoint-initdb.d/base1
 
 volumes:
   mysql_data:
