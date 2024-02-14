@@ -1,1 +1,1 @@
-SELECT * FROM base1.form;
+SELECT * FROM base1.test;
