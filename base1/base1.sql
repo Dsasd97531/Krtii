@@ -1,1 +1,0 @@
-SELECT * FROM base1.test;

@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 COPY . /xampp/htdocs/PhpProject1/Krtii/
 
 # Копируем my.ini внутрь контейнера
-COPY my.ini /etc/mysql/my.cnf
+COPY my.ini /etc/mysql/my.ini
 
 # Указываем рабочую директорию
 WORKDIR /xampp/htdocs/PhpProject1/Krtii/
@@ -28,7 +28,7 @@ RUN a2enmod rewrite
 EXPOSE 80
 
 # Открываем порт для MySQL
-EXPOSE 3306
+#EXPOSE 3306
 
 # Опционально, если требуется выполнить какие-либо команды при запуске контейнера
 CMD ["apache2-foreground"]
