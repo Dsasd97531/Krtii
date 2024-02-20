@@ -1,9 +1,13 @@
+
 <?php
 $servername = "mysql";
 $username = "root";
 $password = "";
 $dbname = "base1";
 $conn = new mysqli($servername, $username, $password, $dbname);
+if(mysqli_connect_errno()){
+ echo mysqli_connect_error();
+}
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -76,9 +80,11 @@ echo "First function its a authorization at to the page";
         $name=$_POST["name"];
         $pass=$_POST["pass"];
         $delta= new Delta();    
-        
+
+  if($name!=null && $pass!=null){
         $a=$delta->que($conn,"Select name from test where name like "."'$name'","name"); 
         $a=$delta->sin($conn,$name,$pass);
+        }
         if($a){echo"Hello To the World ".$name;
         }else{echo"Ur not log in";echo"<br>";}
         
@@ -105,10 +111,11 @@ echo "First function its a authorization at to the page";
     <form action="index.php" method="post">
         <?php
         echo "Second its a CRUD, At first u can update and read a text, Second, create a new text, thierd delete raws "."<br>";
-            $a=$conn->query("select max(id) from form");
-            $a=$a->fetch_assoc();
+            $a=$conn->query("select max(id) from form");            
+if($a==FALSE){$a=[];}
+else{$a=$a->fetch_assoc();
             $a=$a['max(id)'];
-            $b=0;
+            $b=0;}
             for($i=1;$i<=$a;$i++){
                 $c=$delta->que($conn,"select id from form where id = $i","id");
                 if($c!=null){echo"$i".",";}
@@ -126,7 +133,7 @@ if(isset($_POST["button1"])){
     $id = $_POST['id'];
     $text = $delta->que($conn, "SELECT formcol FROM form WHERE id = $id", "formcol");
 
-    echo '<form action="index.php" method="post">';
+echo '<form action="index.php" method="post">';
     echo '<label for="text">Text:</label><br>';
     echo "<textarea type='text' class='a' name='text$id' id='text$id'>$text</textarea>";
     echo '<input type="submit" name="button2" value="Update Text">';
@@ -170,7 +177,7 @@ if(isset($_POST["button2"])){
         ?>
     </body>
 </html>
-<html lang="en">
+<!-- <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -226,7 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
     </video>
 </body>
-</html>
+</html> -->
 <?php
 $conn->close();
 ?>
